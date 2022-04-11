@@ -1,0 +1,84 @@
+:root {
+  --base-h: 200;
+  --base-s: 75%;
+  --base-l: 19%;
+  --haze-l: 98%;
+  --color: hsl(var(--base-h), var(--base-s), var(--base-l));
+  --color-comp: hsl(calc(var(--base-h) + 180), var(--base-s), var(--base-l));
+  --color-tri1: hsl(calc(var(--base-h) + 30), var(--base-s), var(--base-l));
+  --color-tri2: hsl(calc(var(--base-h) - 30), var(--base-s), var(--base-l));
+  --color-haze: hsl(var(--base-h), var(--base-s), var(--haze-l));
+  --color-comp-haze: hsl(calc(var(--base-h) + 180), var(--base-s), var(--haze-l));
+  --fakerow-height: 2rem;
+  --fakerow-gap: 0rem;
+}
+* { box-sizing: border-box; }
+body {
+  color: var(--color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 2rem;
+}
+h1 {
+  font-size: 1.75rem;
+  font-weight: normal;
+  margin: 0;
+  margin-block-end: 1rem;
+}
+button {
+  background-color: var(--color);
+  border: 1px solid var(--color);
+  border-radius: 0.25rem;
+  color: var(--color-comp-haze);
+  font-size: 0.85rem;
+  height: 2.5rem;
+  margin-block-end: 4rem;
+  width: 10rem;
+}
+button:hover {
+  background-color: var(--color-tri1);
+  cursor: pointer;
+}
+button:disabled {
+  background-color: var(--color-haze);
+  border-color: gray;
+  color: dimgray;
+  cursor: default;
+}
+.faketable {
+  border: 1px solid var(--color-tri2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fakerow-gap);
+  margin: 0.5rem 0 1rem 0;
+  min-height: calc((5 * var(--fakerow-height)) + (4 * var(--fakerow-gap)));
+}
+.fakerow {
+  align-items: center;
+  border-bottom: 1px solid var(--color-tri1);
+  display: flex;
+  flex-wrap: nowrap;
+  min-height: var(--fakerow-height);
+  padding: 0 1rem;
+}
+.fakerow:hover {
+  background-color: var(--color-haze);
+  color: var(--color-comp);
+}
+.fakerow.none, .fakerow:last-child {
+  border: none;
+}
+span.none {width: 100%; }
+span.id { flex: 6rem 0 0; }
+span.name { flex: 9rem 0 0; }
+span.stars, span.followers {
+  flex: 4rem 0 0;
+  margin-left: auto;
+}
+span.avatar {
+  align-items: center;
+  display: flex;
+  flex: calc(var(--fakerow-height) + 3rem) 0 0;
+}
+span.avatar > img {
+  height: calc(var(--fakerow-height) - 4px);
+}
