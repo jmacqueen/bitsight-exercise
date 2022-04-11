@@ -4,13 +4,14 @@ const store = {
 }
 const repoButton = document.querySelector('#hot_repo')
 const userButton = document.querySelector('#prolific_users')
+
 // controller for aborting possibly conflicting updateFollowerCounts fetches
 let controller 
 
 // Utility functions
 function formatDateForQuery(date) {
-    // date.toISOString() will return UTC so don't use that!
-    return date.toLocaleString('sv').slice(0,10)
+  // date.toISOString() will return UTC so don't use that!
+  return date.toLocaleString('sv').slice(0,10)
 }
 function buildFullQueryString(q,sort) {
   return [
@@ -56,28 +57,23 @@ function renderNoContent() {
   return `<div class="fakerow none"><span class="none">No content</span></div>`
 }
 
-// Template aggregators
-function renderAllRepoRows(repoEntries) {
-  if (repoEntries.length === 0) return renderNoContent()
-  return repoEntries.map((entry, index) => renderRepoRow(entry, index)).join("\n")
-}
-function renderAllUserRows(userEntries) {
-  if (userEntries.length === 0) return renderNoContent()
-  return userEntries.map((entry, index) => renderUserRow(entry, index)).join("\n")
+// Template aggregator
+function renderAllRows(entries, rowRenderFunction) {
+  if (!entries || !Array.isArray(entries) || entries.length === 0) return renderNoContent()
+  return entries.map((entry, index) => rowRenderFunction(entry, index)).join("\n")
 }
 
 // Final DOM insertion and guards
 function renderRepoTable() {
-  if (!store.hotRepos || !Array.isArray(store.hotRepos)) return
-  document.querySelector('#hot_repos_results').innerHTML = renderAllRepoRows(store.hotRepos)
+  document.querySelector('#hot_repos_results').innerHTML = renderAllRows(store.hotRepos, renderRepoRow)
 }
 function renderUserTable() {
-  if (!store.prolificUsers || !Array.isArray(store.prolificUsers)) return
-  document.querySelector('#prolific_users_results').innerHTML = renderAllUserRows(store.prolificUsers)
+  document.querySelector('#prolific_users_results').innerHTML = renderAllRows(store.prolificUsers, renderUserRow)
 }
 
 // Fetch and display
 function updateFollowerCounts(userList) {
+  // build new shared AbortController signal for the full set of follower update fetches
   controller = new AbortController()
   const signal = controller.signal
   userList.forEach( user => {
